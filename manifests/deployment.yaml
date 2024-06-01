@@ -1,22 +1,29 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: get-tasks
+  name: todo-get-task-deployment
 spec:
   replicas: 3
   selector:
-    matchLabels:
-      app: get-tasks
+    matchExpressions: 
+      - key: app
+        operator: In
+        values: 
+        - todo-get-task
+  strategy: 
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
   template:
     metadata:
       labels:
-        app: get-tasks
+        app: todo-get-task
     spec:
       containers:
-      - name: get-tasks
+      - name: get-task
         env:
           - name: CONNECTION_STRING
-            value: "Driver={ODBC Driver 17 for SQL Server};Server=tcp:devopsinsiderssrv.database.windows.net,1433;Database=todoapp;Uid=devopsadmin;Pwd=P@ssw01rd@123;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;"                                          
-        image: devopsinsiders/get-tasks
+            value: "Driver={ODBC Driver 17 for SQL Server};Server=tcp:subho-db.database.windows.net,1433;Database=subho-db;Uid=adminuser;Pwd=GQ4C9q`p[9A£;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;"
+        image: subho9407/todobackend-add_task
         ports:
         - containerPort: 8000
